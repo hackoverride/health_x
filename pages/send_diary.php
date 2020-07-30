@@ -2,7 +2,7 @@
 
     $x_user = $_POST['user_id'];
     $dato = $_POST["date"];
-    $tanker = $_POST["diary"];
+    $tanker = $_POST["tanker"];
                     try {
                         require('./pages/db.php');
                         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
