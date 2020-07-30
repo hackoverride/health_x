@@ -87,6 +87,9 @@ $message;
     } else if (isset($_POST["logweight"])){
         require('./pages/send_weightin.php');
         $message = "New weight registered";
+    } else if (isset($_POST["newDiary"])){
+        require('./pages/send_diary.php');
+        $message = "New diary entry registerd";
     }
 
 ?>
@@ -117,8 +120,10 @@ $message;
         }
         if (isset($_SESSION['user_id'])){
             echo '<div id="hoved">';
+            /* Fasting timer */
             
             /* Diary */
+            require('./pages/diary.php');
 
             /* Logger */
 
