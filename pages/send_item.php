@@ -1,8 +1,16 @@
 <?php
 
-    $x_user = xme($_POST['user_id']);
-    $dato = xme($_POST["date"]);
-    $tanker = xme($_POST["tanker"]);
+    $name = xme($_POST["name"]);
+    $brand = xme($_POST["brand"]);
+    $energy = xme($_POST["energy"]);
+    $kcal = xme($_POST["kcal"]);
+    $fat = xme($_POST["fat"]);
+    $carbs = xme($_POST["carbs"]);
+    $fiber = xme($_POST["fiber"]);
+    $protein = xme($_POST["protein"]);
+    $salt = xme($_POST["salt"]);
+
+
                     try {
                         require('./pages/db.php');
                         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -10,12 +18,11 @@
                         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                         $sql = 
                         "
-                        INSERT INTO x_diary (x_user, dato, tanker)
-                        VALUES ('".$x_user."', '".$dato."', '".$tanker."')
+                        INSERT INTO x_varenavn (name, brand, energy, kcal, fat, carbs, fiber, protein, salt)
+                        VALUES ('".$name."', '".$brand."', '".$energy."', '".$kcal."', '".$fat."', '".$carbs."', '".$fiber."', '".$protein."', '".$salt."')
                         ";
                         $conn->exec($sql);
                         $conn = null;
-                        $ok = true;
 
                     } catch(PDOException $e) {
                         echo $e;

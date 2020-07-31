@@ -2,6 +2,15 @@
 header('Cache-Control: no cache'); // gjør det mulig å trykke tilbake uten advarselen i webleseren.
 session_cache_limiter('private_no_expire'); // gjør det mulig å trykke tilbake uten advarselen i webleseren.
 session_start();
+
+function xme($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
+
+
 $loggedin;
 $error;
 $message;
@@ -14,7 +23,7 @@ $message;
         //sql check if user contains login
         require('./pages/db.php');
         try {
-            $bruker = $_POST["user"];
+            $bruker = xme($_POST["user"]);
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -68,10 +77,10 @@ $message;
         try {
             require('./pages/db.php');
             $pass = password_hash( $_POST["password"], PASSWORD_DEFAULT);
-            $firstname = htmlspecialchars($_POST["firstname"]);
-            $lastname = htmlspecialchars($_POST["lastname"]);
-            $user = htmlspecialchars($_POST["user"]);
-            $email = htmlspecialchars($_POST["email"]);
+            $firstname = xme($_POST["firstname"]);
+            $lastname = xme($_POST["lastname"]);
+            $user = xme($_POST["user"]);
+            $email = xme($_POST["email"]);
 
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -90,6 +99,9 @@ $message;
     } else if (isset($_POST["newDiary"])){
         require('./pages/send_diary.php');
         $message = "New diary entry registerd";
+    } else if (isset($_POST["newItem"])){
+        require('./pages/send_item.php');
+        $message = "New item created";
     }
 
 ?>
@@ -106,11 +118,16 @@ $message;
 </head>
 
 <body>
+<div id="hiro">
+    <h1 class="headliner">Health X</h1>
+    <p>By Michael Lund</p>
+</div>
     <main>
         <?php
-        echo '<div id="messager">';
-        echo $message;
-        echo '</div>';
+        if (isset($message)){
+            echo $message;
+        }
+        
         /* If wrong password for too many attempts. redirect! */
         if ($_SESSION["x_attempt"] > 2){
             $_SESSION["x_attempt"] = 1;
@@ -119,21 +136,27 @@ $message;
                                  </script>';
         }
         if (isset($_SESSION['user_id'])){
+            
             echo '<div id="hoved">';
+
+            
             /* Fasting timer */
             
             /* Diary */
+            echo '<h3 class="headliner" >Diary</h3>';
             require('./pages/diary.php');
 
             /* Logger */
+            echo '<h3 class="headliner" >Log your meal</h3>';
+            require('./pages/logger.php');
 
             /* Register new items */
+            echo '<h3 class="headliner" >Register new item</h3>';
+            require('./pages/newitems.php');
 
             /* Weigh-in */
+            echo '<h3 class="headliner" >Weigh in</h3>';
             require('./pages/weighin.php');
-
-
-
 
             echo '</div>';
 
